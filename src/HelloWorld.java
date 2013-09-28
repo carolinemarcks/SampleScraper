@@ -15,10 +15,11 @@ public class HelloWorld {
         System.out.println("Hello World!"); // Display the string.
         
         try {
-			String urlParameters =
-			        "q=" + URLEncoder.encode("Aaron+Tietz", "UTF-8");
-			        //"&lName=" + URLEncoder.encode("???", "UTF-8");
-			String result = executePost("http://www.facebook.com/search.php",urlParameters);
+        	String name = "Aaron Tietz";
+        	String encodedname = URLEncoder.encode(name,"UTF-8");
+        	String url = "http://www.facebook.com/search.php?q=" + encodedname + "&amp;_fb_noscript=1";
+        	
+			String result = executeGet(url);
 			PrintWriter writer = new PrintWriter("fbscrape.txt", "UTF-8");
 			writer.println(result);
 			writer.close();
@@ -33,7 +34,7 @@ public class HelloWorld {
                 
         
     }
-	public static String executePost(String targetURL, String urlParameters){
+	public static String executeGet(String targetURL){
 	    URL url;
 	    HttpURLConnection connection = null;  
 	    try {
@@ -44,8 +45,6 @@ public class HelloWorld {
 	      connection.setRequestProperty("Content-Type", 
 	           "application/x-www-form-urlencoded");
 				
-	      connection.setRequestProperty("Content-Length", "" + 
-	               Integer.toString(urlParameters.getBytes().length));
 	      connection.setRequestProperty("Content-Language", "en-US");  
 				
 	      connection.setUseCaches (false);
@@ -55,7 +54,6 @@ public class HelloWorld {
 	      //Send request
 	      DataOutputStream wr = new DataOutputStream (
 	                  connection.getOutputStream ());
-	      wr.writeBytes (urlParameters);
 	      wr.flush ();
 	      wr.close ();
 
